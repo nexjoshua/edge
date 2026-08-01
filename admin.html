@@ -4,8 +4,21 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>EDGE — Admin Dashboard</title>
+<meta name="description" content="EDGE Admin — student progress dashboard for teachers and staff." />
 <meta name="robots" content="noindex, nofollow" />
-<link rel="icon" href="assets/icons/icon-32.png" />
+
+<!-- PWA / Add to Home Screen (separate manifest so installing from the
+     admin page launches straight into admin.html, not the student app) -->
+<link rel="manifest" href="manifest-admin.json" />
+<meta name="theme-color" content="#FFFFFF" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EDGE Admin" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="assets/icons/icon-32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="assets/icons/icon-192.png" />
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
+
 <link rel="stylesheet" href="style.css" />
 <link rel="stylesheet" href="admin.css" />
 </head>
