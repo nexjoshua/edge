@@ -1,4 +1,4 @@
-const CACHE_NAME = "edge-cache-v12";
+const CACHE_NAME = "edge-cache-v13";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -16,10 +16,10 @@ const CORE_ASSETS = [
   "./assets/vendor/chart.umd.min.js",
   "./assets/vendor/supabase.js",
   // Admin dashboard — cached too, so it also works offline / installs cleanly.
+  // Now shares manifest.json with index.html (no more manifest-admin.json).
   "./admin.html",
   "./admin.css",
   "./admin.js",
-  "./manifest-admin.json",
 ];
 
 self.addEventListener("install", (event) => {
