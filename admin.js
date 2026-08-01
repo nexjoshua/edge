@@ -287,3 +287,10 @@ document.querySelectorAll("#studentTable thead th[data-sort]").forEach((th) => {
     renderTable();
   });
 });
+
+/* ---------- Register service worker (same one the student app uses) ---------- */
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js").catch(() => {});
+  });
+}
