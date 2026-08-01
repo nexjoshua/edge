@@ -1,4 +1,4 @@
-const CACHE_NAME = "edge-cache-v10";
+const CACHE_NAME = "edge-cache-v11";
 const CORE_ASSETS = [
   "./",
   "./index.html",
@@ -8,10 +8,18 @@ const CORE_ASSETS = [
   "./supabase-config.js",
   "./assets/logo.png",
   "./assets/logo-dark.png",
+  "./assets/icons/icon-32.png",
+  "./assets/icons/icon-180.png",
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
+  "./assets/icons/icon-maskable-512.png",
   "./assets/vendor/chart.umd.min.js",
   "./assets/vendor/supabase.js",
+  // Admin dashboard — cached too, so it also works offline / installs cleanly.
+  "./admin.html",
+  "./admin.css",
+  "./admin.js",
+  "./manifest-admin.json",
 ];
 
 self.addEventListener("install", (event) => {
@@ -42,7 +50,13 @@ self.addEventListener("fetch", (event) => {
           });
         })
         .catch(() => {
-          if (event.request.mode === "navigate") return caches.match("./index.html");
+          if (event.request.mode === "navigate") {
+            // Offline page load: serve whichever shell matches what was
+            // actually requested, so a failed /admin.html load doesn't
+            // wrongly hand back the student app.
+            const isAdmin = event.request.url.includes("admin.html");
+            return caches.match(isAdmin ? "./admin.html" : "./index.html");
+          }
         });
     })
   );
