@@ -1,4 +1,4 @@
-const CACHE_NAME = "edge-cache-v11";
+const CACHE_NAME = "edge-cache-v12";
 const CORE_ASSETS = [
   "./",
   "./index.html",
