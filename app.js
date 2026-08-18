@@ -40,7 +40,13 @@ const READING_ITEMS = [
     en: {
       passage: "Maya wanted to join the science fair, but she was afraid her project would not be good enough. Her teacher told her, \"You don't have to be perfect. You only have to try and learn along the way.\" Maya took a breath, signed up, and started building her volcano model that afternoon.",
       question: "Why did Maya's teacher encourage her to join the science fair?",
-      accepted: ["to try and learn", "try and learn along the way", "she doesn't have to be perfect", "trying and learning", "so she could try and learn", "just try and learn", "it's okay to not be perfect", "you don't need to be perfect", "learning along the way", "not being perfect", "to learn as she goes"],
+      options: [
+        "She told Maya she didn't have to be perfect, only try and learn along the way",
+        "She said Maya would definitely win first prize",
+        "She wanted Maya to build a bigger volcano than the other students",
+        "She said the science fair was mandatory for all students",
+      ],
+      correct: 0,
     },
     fil: {
       passage: "Gusto sanang sumali ni Maya sa science fair, pero natatakot siyang baka hindi maganda ang kanyang proyekto. Sinabi ng kanyang guro, \"Hindi mo kailangang maging perpekto. Kailangan mo lang subukan at matuto habang ginagawa mo ito.\" Huminga si Maya nang malalim, nagparehistro, at sinimulan niyang gawin ang kanyang volcano model nang hapon na iyon.",
@@ -52,7 +58,13 @@ const READING_ITEMS = [
     en: {
       passage: "Every morning before school, Elijah fed the stray cats near their sari-sari store. His mother said it taught him responsibility, but Elijah just liked seeing the cats wait for him by the gate.",
       question: "What did Elijah do every morning before school?",
-      accepted: ["fed the stray cats", "feed the stray cats", "he fed the cats", "feeding the cats", "feeding stray cats", "fed cats", "he feeds the stray cats", "feeding the stray cats near the store"],
+      options: [
+        "He fed the stray cats near their sari-sari store",
+        "He walked his dog around the neighborhood",
+        "He watered the plants in the garden",
+        "He helped his mother open the sari-sari store",
+      ],
+      correct: 0,
     },
     fil: {
       passage: "Tuwing umaga bago pumasok sa paaralan, pinapakain ni Elijah ang mga pusang gala malapit sa kanilang sari-sari store. Sabi ng kanyang ina, nagtuturo ito ng responsibilidad, pero gusto lang talaga ni Elijah na makita ang mga pusang naghihintay sa kanya sa gate.",
@@ -64,7 +76,8 @@ const READING_ITEMS = [
     en: {
       passage: "The barangay held a clean-up drive along the river. Volunteers wore gloves and collected plastic bottles, old sacks, and broken slippers. By noon, three full sacks of trash were ready for proper disposal.",
       question: "How many sacks of trash were collected by noon?",
-      accepted: ["three", "3", "three sacks", "3 sacks", "there were three", "three full sacks"],
+      options: ["Three sacks", "Five sacks", "One sack", "Ten sacks"],
+      correct: 0,
     },
     fil: {
       passage: "Nagsagawa ang barangay ng clean-up drive sa tabi ng ilog. Nagsuot ng guwantes ang mga volunteer at nangolekta ng mga plastic bottle, lumang sako, at sirang tsinelas. Pagtanghali, tatlong puno ng basurang sako na ang handa para sa tamang pagtatapon.",
@@ -76,7 +89,13 @@ const READING_ITEMS = [
     en: {
       passage: "Grace practiced her speech every night in front of the mirror. On the day of the contest, her hands were shaking, but once she started talking about her favorite topic, the fear disappeared.",
       question: "What helped Grace's fear disappear during the contest?",
-      accepted: ["talking about her favorite topic", "her favorite topic", "she started talking about her favorite topic", "speaking about her favorite topic", "focusing on her favorite topic", "talking about a topic she liked", "her favorite subject"],
+      options: [
+        "Talking about her favorite topic",
+        "Seeing her parents in the audience",
+        "Reading directly from her notes",
+        "Hearing the crowd cheer before she started",
+      ],
+      correct: 0,
     },
     fil: {
       passage: "Pinagpraktisan ni Grace ang kanyang talumpati tuwing gabi sa harap ng salamin. Nang araw ng patimpalak, nanginginig ang kanyang mga kamay, pero nang magsimula siyang magsalita tungkol sa kanyang paboritong paksa, nawala ang kanyang takot.",
@@ -88,7 +107,13 @@ const READING_ITEMS = [
     en: {
       passage: "The old library on Rizal Street was quiet except for the sound of pages turning. Mr. Santos, the librarian, knew exactly where every book belonged, even without checking the shelf labels.",
       question: "What did Mr. Santos know without checking the shelf labels?",
-      accepted: ["where every book belonged", "where each book belonged", "the location of every book", "where the books belonged", "he knew where each book went", "which shelf each book belonged on", "book locations", "where books went"],
+      options: [
+        "Where every book belonged",
+        "The names of every visitor",
+        "The library's opening hours",
+        "Which books were overdue",
+      ],
+      correct: 0,
     },
     fil: {
       passage: "Tahimik ang lumang aklatan sa Rizal Street maliban sa ingay ng mga pahinang binabaligtad. Alam na alam ni Mr. Santos, ang librarian, kung saan dapat ilagay ang bawat libro, kahit hindi niya tinitingnan ang mga label sa istante.",
@@ -99,22 +124,6 @@ const READING_ITEMS = [
 ];
 
 const LESSONS_PER_LEVEL = 5;
-
-/* ---------- Lock gate questions (Unified Homescreen and Lockflow — Plan B) ---------- */
-/* Short math problems with a numeric answer, entered via the on-screen
-   keypad — mirrors the original "Enter password to unlock" mockup. Shown
-   once per day, before the student even reaches the login screen. */
-
-const LOCK_QUESTIONS = [
-  { q: "184 / 2", a: "92" },
-  { q: "12 × 4", a: "48" },
-  { q: "150 / 3", a: "50" },
-  { q: "9 × 9", a: "81" },
-  { q: "200 − 47", a: "153" },
-  { q: "6 × 7", a: "42" },
-  { q: "88 / 4", a: "22" },
-  { q: "13 × 3", a: "39" },
-];
 
 /* ---------- Pre-Test / Post-Test bank ---------- */
 /* This is a 10-item placeholder subset — expand to your full 20-item
@@ -771,7 +780,7 @@ document.querySelectorAll("[data-goto]").forEach((el) => {
 
 function renderHome() {
   document.getElementById("homeWeek").textContent = lessonsThisWeek();
-  document.getElementById("homeStreak").textContent = `${progress.streak} day${progress.streak === 1 ? "" : "s"}`;
+  document.getElementById("homeStreak").textContent = `${progress.streak} week${progress.streak === 1 ? "" : "s"}`;
   document.getElementById("homeStreakInline").textContent = progress.streak;
   document.getElementById("homeLevel").textContent = progress.level;
 
@@ -783,7 +792,7 @@ function renderHome() {
   const title = document.querySelector(".greeting-title");
   if (title) {
     const firstName = (progress.firstName || currentFirstName || "").trim();
-    title.textContent = firstName ? `Hi ${firstName}, ready for today's lesson?` : "Ready for today's lesson?";
+    title.textContent = firstName ? `Hi ${firstName}, ready for this week's lesson?` : "Ready for this week's lesson?";
   }
 }
 
@@ -802,10 +811,32 @@ function lessonsThisWeek() {
 
 const passageEl = document.getElementById("passageText");
 const readingQuestionEl = document.getElementById("readingQuestion");
-const readingAnswerEl = document.getElementById("readingAnswer");
+const readingOptionsEl = document.getElementById("readingOptions");
 const readingFeedbackEl = document.getElementById("readingFeedback");
-const submitAnswerBtn = document.getElementById("submitAnswer");
 const lessonPillEl = document.getElementById("lessonPill");
+const readingActiveCardEl = document.getElementById("readingActiveCard");
+const readingLockedCardEl = document.getElementById("readingLockedCard");
+const lessonLockedNoteEl = document.getElementById("lessonLockedNote");
+
+// One lesson unlocks per week, per feedback: each lesson's question stays
+// available for the week, then the next lesson opens the following week.
+// Gated off progress.lastCompletedDate (already tracked for the old daily
+// streak) — no new storage needed.
+const LESSON_COOLDOWN_DAYS = 7;
+
+function daysBetween(dateStrA, dateStrB) {
+  return Math.round((new Date(dateStrB) - new Date(dateStrA)) / (1000 * 60 * 60 * 24));
+}
+
+function isLessonUnlocked() {
+  if (!progress.lastCompletedDate) return true; // very first lesson — no wait
+  return daysBetween(progress.lastCompletedDate, todayKey()) >= LESSON_COOLDOWN_DAYS;
+}
+
+function daysUntilNextLesson() {
+  if (!progress.lastCompletedDate) return 0;
+  return Math.max(0, LESSON_COOLDOWN_DAYS - daysBetween(progress.lastCompletedDate, todayKey()));
+}
 
 function currentReadingItem() {
   const item = READING_ITEMS[progress.lesson % READING_ITEMS.length];
@@ -813,26 +844,54 @@ function currentReadingItem() {
 }
 
 function renderReading() {
+  lessonPillEl.textContent = `Lesson ${progress.lesson + 1}`;
+
+  if (!isLessonUnlocked()) {
+    readingActiveCardEl.style.display = "none";
+    readingLockedCardEl.style.display = "flex";
+    const remaining = daysUntilNextLesson();
+    lessonLockedNoteEl.textContent =
+      remaining <= 0 ? "A new lesson unlocks soon." : `A new lesson unlocks in ${remaining} day${remaining === 1 ? "" : "s"}.`;
+    return;
+  }
+
+  readingLockedCardEl.style.display = "none";
+  readingActiveCardEl.style.display = "block";
+
   const item = currentReadingItem();
   passageEl.textContent = item.passage;
   readingQuestionEl.textContent = item.question;
-  readingAnswerEl.value = "";
   readingFeedbackEl.textContent = "";
   readingFeedbackEl.className = "reading-feedback";
-  lessonPillEl.textContent = `Lesson ${progress.lesson + 1}`;
   wrongAttempts = 0;
+  renderReadingOptions(item);
 }
 renderReading();
 
-function submitReadingAnswer() {
+function renderReadingOptions(item) {
+  readingOptionsEl.innerHTML = "";
+  item.options.forEach((opt, i) => {
+    const btn = document.createElement("button");
+    btn.className = "test-option-btn";
+    btn.type = "button";
+    btn.textContent = opt;
+    btn.addEventListener("click", () => selectReadingOption(i));
+    readingOptionsEl.appendChild(btn);
+  });
+}
+
+// Multiple-choice: a wrong pick shows which option was correct, then resets
+// after a moment so the student can try again — the lesson only completes
+// (and advances) once they pick the right option, same "keep trying" spirit
+// the typed-answer version had.
+function selectReadingOption(selectedIndex) {
   const item = currentReadingItem();
-  const given = normalize(readingAnswerEl.value);
-  if (!given) {
-    readingFeedbackEl.textContent = "Type an answer first.";
-    readingFeedbackEl.className = "reading-feedback wrong";
-    return;
-  }
-  const isCorrect = item.accepted.some((acc) => given.includes(normalize(acc)));
+  const buttons = readingOptionsEl.querySelectorAll(".test-option-btn");
+  buttons.forEach((b) => (b.disabled = true));
+
+  const isCorrect = selectedIndex === item.correct;
+  buttons[selectedIndex].classList.add(isCorrect ? "correct" : "incorrect");
+  if (!isCorrect) buttons[item.correct].classList.add("correct");
 
   if (isCorrect) {
     readingFeedbackEl.textContent = "Correct! Lesson complete.";
@@ -843,21 +902,36 @@ function submitReadingAnswer() {
     wrongAttempts += 1;
     readingFeedbackEl.textContent = "Not quite — check the passage and try again.";
     readingFeedbackEl.className = "reading-feedback wrong";
+    setTimeout(() => {
+      readingFeedbackEl.textContent = "";
+      readingFeedbackEl.className = "reading-feedback";
+      buttons.forEach((b) => {
+        b.disabled = false;
+        b.classList.remove("correct", "incorrect");
+      });
+    }, 1100);
   }
 }
 
-submitAnswerBtn.addEventListener("click", submitReadingAnswer);
-readingAnswerEl.addEventListener("keydown", (e) => {
-  if (e.key === "Enter") submitReadingAnswer();
-});
-
 function completeLesson(item) {
   const today = todayKey();
-  if (progress.lastCompletedDate !== today) {
-    const yKey = todayKey(-1);
-    progress.streak = progress.lastCompletedDate === yKey ? progress.streak + 1 : 1;
-    progress.lastCompletedDate = today;
+  // Streak now counts consecutive *weeks* with a completed lesson (lessons
+  // are gated to one per week — see isLessonUnlocked() above). Continues if
+  // this completion lands in the very next weekly window after the last
+  // one; resets if a week (or more) was skipped.
+  if (!progress.lastCompletedDate) {
+    progress.streak = 1;
+  } else {
+    const gap = daysBetween(progress.lastCompletedDate, today);
+    if (gap >= LESSON_COOLDOWN_DAYS && gap < LESSON_COOLDOWN_DAYS * 2) {
+      progress.streak += 1;
+    } else if (gap >= LESSON_COOLDOWN_DAYS * 2) {
+      progress.streak = 1;
+    }
+    // gap < 7 shouldn't happen (the weekly gate prevents it), so streak is
+    // left unchanged as a safety fallback.
   }
+  progress.lastCompletedDate = today;
 
   progress.lesson += 1;
   progress.level = Math.floor(progress.lesson / LESSONS_PER_LEVEL) + 1;
@@ -907,7 +981,7 @@ function renderDashboard() {
   animateNumber(document.getElementById("statWeek"), lessonsThisWeek());
   animateNumber(document.getElementById("statStreak"), progress.streak);
   document.getElementById("statStreakNote").textContent =
-    progress.streak === 0 ? "complete a lesson today to start" : "days in a row";
+    progress.streak === 0 ? "complete a lesson to start" : "weeks in a row";
   animateNumber(document.getElementById("statLevel"), progress.level);
 
   const remaining = LESSONS_PER_LEVEL - (progress.lesson % LESSONS_PER_LEVEL);
@@ -919,6 +993,54 @@ function renderDashboard() {
   } else {
     renderChart();
   }
+
+  renderHistoryList();
+}
+
+/* Detailed Progress list: every completed lesson (newest first), with the
+   question that was asked and the accuracy earned on that attempt. Reads
+   straight from progress.history, which is already synced to Supabase's
+   lesson_history table (or kept in localStorage in offline mode) — so no
+   extra data fetching is needed here. */
+const historyListEl = document.getElementById("historyList");
+const HISTORY_LIST_LIMIT = 25;
+
+function accuracyBand(accuracy) {
+  if (accuracy >= 85) return "acc-high";
+  if (accuracy >= 65) return "acc-mid";
+  return "acc-low";
+}
+
+function renderHistoryList() {
+  const entries = progress.history.slice().reverse().slice(0, HISTORY_LIST_LIMIT);
+
+  if (!entries.length) {
+    historyListEl.innerHTML = `<p class="history-empty">No lessons completed yet — finish one in the Learn tab to see it here.</p>`;
+    return;
+  }
+
+  historyListEl.innerHTML = entries
+    .map((h) => {
+      const dateLabel = h.dateKeyRaw
+        ? new Date(h.dateKeyRaw).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+        : h.dateKey || "—";
+      return `
+      <div class="history-item">
+        <div class="history-item-main">
+          <p class="history-item-question">${escapeHtml(h.question || "Lesson")}</p>
+          <p class="history-item-date">${escapeHtml(dateLabel)}</p>
+        </div>
+        <span class="history-item-accuracy ${accuracyBand(h.accuracy)}">${h.accuracy}%</span>
+      </div>`;
+    })
+    .join("");
+}
+
+function escapeHtml(str) {
+  return String(str).replace(
+    /[&<>"']/g,
+    (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+  );
 }
 
 function last7DaysData() {
@@ -1226,90 +1348,137 @@ notificationsItem.addEventListener("click", async () => {
 });
 
 /* ===================== LOCK GATE (Unified Homescreen and Lockflow — Plan B) ===================== */
-/* A full-screen "unlock the app" step shown once per day, before the student
-   ever reaches the login screen — mirrors the original mockup's phone lock
-   screen as closely as a web app can. Tracked per-device (not per-account)
-   in localStorage, since it happens before we know who's signing in. */
+/* A full-screen "unlock the app" step shown once per day, before the app
+   shell appears — mirrors the original mockup's phone lock screen as closely
+   as a web app can. Unlike the earlier math-puzzle version, this is now real
+   authentication: it re-checks the returning student's actual account
+   password against Supabase Auth. It only appears when there's already a
+   session on this device (a returning student) — if there's no session yet
+   (first visit, or already signed out), it's skipped and the app goes
+   straight to the normal Login screen, since that already asks for a
+   password and there's no account yet to "re-check" against. */
 
 const LOCK_DATE_KEY = "edge:lastUnlockDate";
 
-const lockQuestionEl = document.getElementById("lockQuestion");
-const pinDotsEl = document.getElementById("pinDots");
+const lockEmailEl = document.getElementById("lockEmail");
+const lockFormEl = document.getElementById("lockForm");
+const lockPasswordEl = document.getElementById("lockPassword");
+const lockToggleEyeEl = document.getElementById("lockToggleEye");
 const lockFeedbackEl = document.getElementById("lockFeedback");
-const keypadEl = document.getElementById("keypad");
 const unlockBtn = document.getElementById("unlockBtn");
 const lockContentEl = document.querySelector(".lock-content");
+const lockSignOutBtn = document.getElementById("lockSignOutBtn");
 
-let currentLockAnswer = "";
-let enteredPin = "";
+let lockSessionEmail = "";
 
-function todaysLockQuestion() {
-  const seed = Math.floor(Date.now() / (1000 * 60 * 60 * 24));
-  return LOCK_QUESTIONS[seed % LOCK_QUESTIONS.length];
-}
-
-function renderPinDots() {
-  const filled = enteredPin.length;
-  const totalSlots = Math.max(4, filled); // at least 4 slots shown, grows for longer answers
-  pinDotsEl.innerHTML = Array.from({ length: totalSlots }, (_, i) =>
-    `<span class="pin-dot ${i < filled ? "filled" : ""}"></span>`
-  ).join("");
-}
-
-function initLockGate() {
-  const q = todaysLockQuestion();
-  currentLockAnswer = q.a;
-  lockQuestionEl.textContent = q.q;
-  enteredPin = "";
-  lockFeedbackEl.textContent = "";
-  renderPinDots();
-}
-
-keypadEl.addEventListener("click", (e) => {
-  const btn = e.target.closest(".key");
-  if (!btn) return;
-  const key = btn.dataset.key;
-  lockFeedbackEl.textContent = "";
-
-  if (key === "clear") {
-    enteredPin = "";
-  } else if (key === "back") {
-    enteredPin = enteredPin.slice(0, -1);
-  } else if (enteredPin.length < 6) {
-    enteredPin += key;
-  }
-  renderPinDots();
+lockToggleEyeEl.addEventListener("click", () => {
+  const isHidden = lockPasswordEl.type === "password";
+  lockPasswordEl.type = isHidden ? "text" : "password";
+  lockToggleEyeEl.setAttribute("aria-label", isHidden ? "Hide password" : "Show password");
 });
 
-unlockBtn.addEventListener("click", () => {
-  if (enteredPin === currentLockAnswer) {
-    localStorage.setItem(LOCK_DATE_KEY, todayKey());
+function markUnlockedToday() {
+  localStorage.setItem(LOCK_DATE_KEY, todayKey());
+}
+
+function proceedToLogin() {
+  goToScreen("login"); // initAuth() below will flip to "app" if a session already exists
+  initAuth();
+}
+
+function shakeLock(message) {
+  lockFeedbackEl.textContent = message;
+  lockContentEl.classList.remove("shake");
+  void lockContentEl.offsetWidth; // restart animation
+  lockContentEl.classList.add("shake");
+}
+
+lockFormEl.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const pwd = lockPasswordEl.value;
+  if (!pwd) {
+    shakeLock("Enter your password.");
+    return;
+  }
+
+  unlockBtn.disabled = true;
+  const originalLabel = unlockBtn.textContent;
+  unlockBtn.textContent = "Checking…";
+  lockFeedbackEl.textContent = "";
+
+  try {
+    if (SUPABASE_ENABLED) {
+      // Re-verifies the actual account password against Supabase Auth —
+      // this is what makes it real authentication instead of a puzzle.
+      const { error } = await sb.auth.signInWithPassword({ email: lockSessionEmail, password: pwd });
+      if (error) throw error;
+    }
+    // Offline demo mode has no real backend to check a password against —
+    // any non-empty entry is accepted here, same as the rest of offline mode.
+    markUnlockedToday();
     lockContentEl.classList.add("unlocking");
-    setTimeout(() => {
-      goToScreen("login"); // initAuth() below will flip to "app" if a session already exists
-      initAuth();
-    }, 350);
-  } else {
-    lockFeedbackEl.textContent = "Not quite — try again.";
-    lockContentEl.classList.remove("shake");
-    void lockContentEl.offsetWidth; // restart animation
-    lockContentEl.classList.add("shake");
-    enteredPin = "";
-    renderPinDots();
+    setTimeout(proceedToLogin, 350);
+  } catch (err) {
+    shakeLock("Incorrect password — try again.");
+    lockPasswordEl.value = "";
+    lockPasswordEl.focus();
+  } finally {
+    unlockBtn.disabled = false;
+    unlockBtn.textContent = originalLabel;
   }
 });
+
+// Escape hatch: if the returning session on this device isn't actually the
+// student in front of it, let them sign out here instead of being stuck
+// entering a password they don't know.
+lockSignOutBtn.addEventListener("click", async () => {
+  if (SUPABASE_ENABLED && sb) await sb.auth.signOut();
+  sessionStorage.removeItem(AUTH_KEY);
+  markUnlockedToday();
+  proceedToLogin();
+});
+
+async function getReturningSessionEmail() {
+  if (SUPABASE_ENABLED && sb) {
+    const { data: { session } } = await sb.auth.getSession();
+    return session && session.user ? session.user.email : null;
+  }
+  const savedAuth = sessionStorage.getItem(AUTH_KEY);
+  if (!savedAuth) return null;
+  try {
+    return JSON.parse(savedAuth).email || null;
+  } catch (e) {
+    return null;
+  }
+}
+
+async function prepareLockGate() {
+  const email = await getReturningSessionEmail();
+  if (!email) {
+    // No one's signed in on this device yet — nothing to re-authenticate,
+    // so skip straight to the normal login/signup screen.
+    markUnlockedToday();
+    proceedToLogin();
+    return;
+  }
+  lockSessionEmail = email;
+  lockEmailEl.textContent = email;
+  lockPasswordEl.value = "";
+  lockFeedbackEl.textContent = "";
+  goToScreen("lock");
+  lockPasswordEl.focus();
+}
 
 /* Show the splash for 3s, then skip the lock gate if already unlocked
-   today — otherwise show it and wait for a correct answer. */
+   today — otherwise decide whether to show it (returning session) or skip
+   straight to login (no session yet). */
 const SPLASH_DURATION_MS = 3000;
 
 setTimeout(() => {
   if (localStorage.getItem(LOCK_DATE_KEY) === todayKey()) {
-    goToScreen("login");
-    initAuth();
+    proceedToLogin();
   } else {
-    goToScreen("lock");
-    initLockGate();
+    prepareLockGate();
   }
 }, SPLASH_DURATION_MS);
 
