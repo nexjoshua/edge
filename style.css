@@ -657,7 +657,7 @@ button, input {
   font-weight: 700;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.78);
+  color: var(--muted);
   margin: 14px 0 2px;
   text-align: center;
 }
@@ -665,9 +665,9 @@ button, input {
 .greeting-title {
   font-size: 19px;
   font-weight: 800;
-  margin: 0;
+  margin: 0 auto;
   line-height: 1.3;
-  color: #fff;
+  color: var(--ink);
   text-align: center;
   max-width: 280px;
 }
@@ -676,7 +676,7 @@ button, input {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin-top: -34px;
+  margin-top: 20px;
 }
 
 .quick-tile {
