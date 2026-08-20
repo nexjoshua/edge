@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
 <title>EDGE — Educational Development through Guided Engagement</title>
-<meta name="description" content="EDGE — guided bilingual reading comprehension practice with progress tracking." />
+<meta name="description" content="EDGE — guided Grade 9 English reading comprehension practice, aligned to Term 1 MELCs, with progress tracking." />
 
 <!-- PWA / Add to Home Screen -->
 <link rel="manifest" href="manifest.json" />
@@ -308,9 +308,10 @@
           <h2 class="panel-title">Learn</h2>
           <span class="lesson-pill" id="lessonPill">Lesson 1</span>
         </div>
+        <span class="competency-pill" id="competencyPill">Loading…</span>
 
         <div class="chart-card reading-card" id="readingActiveCard">
-          <p class="card-label">Passage</p>
+          <p class="card-label" id="passageLabel">Passage</p>
           <div class="passage" id="passageText">Loading…</div>
 
           <p class="card-label">Question</p>
@@ -372,6 +373,7 @@
             <span id="testProgressText">Item 1 / 20</span>
           </div>
           <div class="progress-track"><div class="progress-fill" id="testProgressFill"></div></div>
+          <span class="competency-pill" id="testCompetencyPill">Loading…</span>
 
           <div class="chart-card reading-card">
             <p class="card-label">Question</p>
