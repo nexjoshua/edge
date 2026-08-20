@@ -1,3 +1,79 @@
+# EDGE — v5: MELC content, answer-mode choice, leaderboard, admin "View as Student"
+
+## What's new in this update
+
+- **MELC-based content** — `READING_ITEMS` (12) and `TEST_ITEMS` (20) are now
+  tagged to the real Grade 9 English Term 1 competencies (poetry structure,
+  contextual lenses, one-act play prewriting), sourced from the official
+  Table of Specifications. See `EDGE_MELC_Question_Bank_Grade9_Term1.pdf`
+  for the full printable bank + answer key.
+- **Multiple Choice / Type Answer toggle** — students can switch how they
+  answer, in Settings or via the segmented control on the Learn and Test
+  tabs. A few items whose correct answer is a full sentence or word list
+  always stay multiple-choice (typing them out isn't realistic); everything
+  else accepts a normalized typed match.
+- **Leaderboard ("Rank" tab)** — ranks students by lessons completed (ties
+  broken by streak, then level), scoped to all grades or just the student's
+  own grade. Reads from a new `public.leaderboard` view that only exposes
+  first name + last initial, grade, and progress numbers — never email.
+  **Requires the SQL below** to exist; not available in offline demo mode.
+- **Admin "View as Student"** — a button per row in the admin dashboard
+  that opens the actual student app logged in as that student, so a
+  teacher can see exactly what they see. **Requires deploying an Edge
+  Function** — see "Setting up v5 features" below. This is the one feature
+  that needs an extra step beyond running SQL, because it's the one thing
+  in this app that genuinely can't be done safely with just the anon key.
+- **Visual refresh** — gradient hero banner on Home, competency badges on
+  Learn/Test, rank badges with medals on the leaderboard, and a consistent
+  segmented-control style used across the new toggles.
+- **Bug fix**: `profiles.first_name`, `profiles.last_name`, and
+  `profiles.is_admin` were referenced by `app.js`/`admin.js` but never
+  actually existed as columns in `supabase-schema.sql` — signup and
+  profile-save would have errored against a real backend. Fixed by
+  `supabase-admin-addon.sql` below (safe to run even if you already have
+  student data — it only adds columns/policies, nothing destructive).
+
+## Setting up v5 features
+
+### 1. Run the SQL (leaderboard, admin access, the column fix above)
+
+Dashboard → **SQL Editor** → **New query** → paste the entire contents of
+**`supabase-admin-addon.sql`** → **Run**. Safe to re-run.
+
+Then create your first admin account (admin.html only has Sign In, not
+Sign Up, by design):
+1. Dashboard → **Authentication → Users → Add user** → set an email +
+   password, leave "Auto Confirm User" checked.
+2. Back in the SQL Editor, run (with that email):
+   ```sql
+   update profiles set is_admin = true
+   where id = (select id from auth.users where email = 'admin@school.edu.ph');
+   ```
+3. Sign in at `admin.html` with that account.
+
+### 2. Deploy the Edge Function (only needed for "View as Student")
+
+Everything else in this app runs off the anon key alone by design — that's
+what makes it safe to ship client-side. Impersonating another user's
+session is the one exception: it requires the **service role key**, which
+must never reach the browser. `supabase/functions/admin-impersonate/`
+keeps that key server-side, checks the caller is really an admin, and
+hands back a one-time login token for exactly one student.
+
+```bash
+supabase login
+supabase link --project-ref <your-project-ref>
+supabase functions deploy admin-impersonate
+```
+
+`SUPABASE_URL`, `SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` are
+injected automatically into every Edge Function by Supabase — no manual
+secrets setup needed. If you skip this step, every other feature (including
+the rest of the admin dashboard) still works fine; only the "View as
+Student" button will show an error explaining what's missing.
+
+---
+
 # EDGE — starter app (v3, aligned to the research plan)
 
 Same layout as v2 (login → Home / Dashboard / Learn / More), now revised to
@@ -14,10 +90,10 @@ Wire up real authentication per Procedures 2.5 once your backend exists (see
 
 | Gap identified | What was added |
 |---|---|
-| "Bilingual" in the module name, but content was English-only | Originally added an English/Filipino toggle. **Reverted per client instruction — the app is English-only.** The Filipino text is still sitting unused in `READING_ITEMS[i].fil` in `app.js` in case bilingual support is wanted back later; `currentReadingItem()` just ignores it for now. |
+| "Bilingual" in the module name, but content was English-only | Reverted per client instruction — the app is English-only. As of v5, `READING_ITEMS`/`TEST_ITEMS` are MELC-tagged (Grade 9 English Term 1) rather than bilingual; see the v5 section above. |
 | Grade 7–10 respondents, but no grade field anywhere | **Grade Level dropdown** (7–10) added to the login form, required at sign-up. Shown in the Home tab greeting. |
 | Plan B (daily pop-up/notification) was written into Scope & Limitations, but the app had no reminder feature at all | **Full-screen PIN Lock Gate** — see "Lock Gate" section below. Superseded an earlier, simpler "Daily Reminder" text pop-up. |
-| Pre-test / Post-test (20 items) mentioned in Procedures and Data Analysis, but nothing in the app administered one | New **Test tab** (Assessment): separate Pre-Test and Post-Test flows, multiple-choice, auto-scored, with a Pre vs. Post comparison card once both are done. Ships with **10 placeholder items** in `TEST_ITEMS` — expand to your full 20-item instrument before actual field testing; the structure doesn't need to change. |
+| Pre-test / Post-test (20 items) mentioned in Procedures and Data Analysis, but nothing in the app administered one | New **Test tab** (Assessment): separate Pre-Test and Post-Test flows, auto-scored, with a Pre vs. Post comparison card once both are done. As of v5, ships with the full **20-item MELC-based instrument** in `TEST_ITEMS`. |
 
 ## Lock Gate (Unified Homescreen and Lockflow — Plan B)
 

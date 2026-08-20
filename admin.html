@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EDGE — Admin Dashboard</title>
+<meta name="description" content="EDGE Admin — student progress dashboard for teachers and staff." />
+<meta name="robots" content="noindex, nofollow" />
+
+<!-- Same manifest as index.html — installing from here now uses the exact
+     same icon set / config that already works, just launching into admin.html. -->
+<!-- PWA / Add to Home Screen -->
+<link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#FFFFFF" />
+<link rel="apple-touch-icon" href="assets/icons/icon-180.png" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="EDGE" />
+<link rel="icon" href="assets/icons/icon-32.png" />
+
+<link rel="stylesheet" href="style.css" />
+<link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-body">
+
+<!-- ============ ADMIN LOGIN ============ -->
+<section class="admin-login-screen" id="adminLoginScreen">
+  <div class="login-card">
+    <div class="login-card-accent"></div>
+    <div class="login-card-body">
+      <div class="login-logo-box">
+        <img src="assets/logo.png" alt="EDGE" class="logo-light" />
+        <img src="assets/logo-dark.png" alt="EDGE" class="logo-dark" />
+      </div>
+
+      <h1 class="login-title">Admin Sign In</h1>
+      <p class="login-subtitle">STAFF / TEACHER ACCESS</p>
+
+      <p class="offline-banner" id="adminOfflineBanner" style="display:none;">
+        Supabase isn't connected in <code>supabase-config.js</code> — the admin
+        dashboard needs a real backend and can't run in offline demo mode.
+      </p>
+
+      <form id="adminLoginForm">
+        <label class="field-label" for="adminEmail">Email Address</label>
+        <input class="field-input" type="email" id="adminEmail" placeholder="admin@school.edu.ph" autocomplete="username" required />
+
+        <label class="field-label" for="adminPassword">Password</label>
+        <div class="password-row">
+          <input class="field-input" type="password" id="adminPassword" placeholder="••••••••" autocomplete="current-password" required />
+          <button type="button" class="eye-btn" id="adminToggleEye" aria-label="Show password">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        <p class="login-error" id="adminLoginError"></p>
+
+        <button type="submit" class="signin-btn" id="adminSubmitBtn">Sign In</button>
+      </form>
+
+      <p class="admin-note">Admin accounts are created by whoever manages this school's Supabase project — see <code>supabase-admin-addon.sql</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMIN DASHBOARD ============ -->
+<section class="admin-dashboard" id="adminDashboardScreen" style="display:none;">
+
+  <div class="admin-top-accent"></div>
+  <header class="admin-top-bar">
+    <div class="top-bar-logo">
+      <img src="assets/logo.png" alt="EDGE" class="logo-light" />
+      <img src="assets/logo-dark.png" alt="EDGE" class="logo-dark" />
+    </div>
+    <div class="admin-top-actions">
+      <div class="admin-account">
+        <span class="admin-avatar" id="adminAvatarInitials">A</span>
+        <span class="admin-email" id="adminEmailDisplay"></span>
+      </div>
+      <button class="admin-signout-btn" id="adminSignOutBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="admin-main">
+    <h1 class="admin-page-title">Student Progress</h1>
+    <p class="section-subtext">Overview of every registered student's activity, streaks, and test scores.</p>
+
+    <div class="admin-summary-grid" id="adminSummaryGrid">
+      <div class="admin-summary-card">
+        <p class="admin-summary-label">Total Students</p>
+        <p class="admin-summary-value" id="summaryTotal">—</p>
+      </div>
+      <div class="admin-summary-card">
+        <p class="admin-summary-label">Avg. Level</p>
+        <p class="admin-summary-value" id="summaryAvgLevel">—</p>
+      </div>
+      <div class="admin-summary-card">
+        <p class="admin-summary-label">Avg. Pre-Test</p>
+        <p class="admin-summary-value" id="summaryAvgPre">—</p>
+      </div>
+      <div class="admin-summary-card">
+        <p class="admin-summary-label">Avg. Post-Test</p>
+        <p class="admin-summary-value" id="summaryAvgPost">—</p>
+      </div>
+    </div>
+
+    <div class="admin-table-toolbar">
+      <input type="text" class="field-input admin-search" id="studentSearch" placeholder="Search by name, email, or grade…" />
+      <button class="ghost-btn" id="refreshBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 1 3 6.7"/><path d="M3 21v-5h5"/></svg>
+        Refresh
+      </button>
+    </div>
+
+    <div class="admin-table-card">
+      <div class="admin-table-scroll">
+        <table class="admin-table" id="studentTable">
+          <thead>
+            <tr>
+              <th data-sort="name">Student</th>
+              <th data-sort="grade">Grade</th>
+              <th data-sort="lesson">Lessons</th>
+              <th data-sort="streak">Streak</th>
+              <th data-sort="level">Level</th>
+              <th data-sort="pre">Pre-Test</th>
+              <th data-sort="post">Post-Test</th>
+              <th data-sort="delta">Change</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody">
+            <tr><td colspan="9" class="admin-table-empty">Loading…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</section>
+
+<script src="assets/vendor/supabase.js"></script>
+<script src="supabase-config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>
