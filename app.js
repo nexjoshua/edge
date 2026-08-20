@@ -30,117 +30,273 @@ if (!SUPABASE_ENABLED) {
   }
 }
 
-/* ---------- Content bank (bilingual: English + Filipino) ---------- */
-/* Each item has an `en` and `fil` version of the same passage/question so the
-   Learn tab can toggle language, per the app's "Bilingual Reading
-   Comprehension Module." */
+/* ---------- Content bank (MELC-based, Grade 9 English Term 1) ---------- */
+/* Each item is tagged with its DepEd Term 1 learning competency (melc: "A"|"B"|"C").
+   MELC_LABELS below gives the full competency text shown to students; melcLabel is
+   the short label used on-screen. One lesson unlocks per week (see
+   isLessonUnlocked()); items cycle through READING_ITEMS in order. */
+
+const MELC_LABELS = {
+  A: "Analyze structural and linguistic elements in Anglo-American poetry; revise for coherence, unity, and voice",
+  B: "Analyze literary texts through historical, sociocultural, biographical, and related contextual lenses",
+  C: "Identify meaning and purpose and prepare an original one-act play through prewriting",
+};
 
 const READING_ITEMS = [
   {
-    en: {
-      passage: "Maya wanted to join the science fair, but she was afraid her project would not be good enough. Her teacher told her, \"You don't have to be perfect. You only have to try and learn along the way.\" Maya took a breath, signed up, and started building her volcano model that afternoon.",
-      question: "Why did Maya's teacher encourage her to join the science fair?",
-      options: [
-        "She told Maya she didn't have to be perfect, only try and learn along the way",
-        "She said Maya would definitely win first prize",
-        "She wanted Maya to build a bigger volcano than the other students",
-        "She said the science fair was mandatory for all students",
-      ],
-      correct: 0,
-    },
-    fil: {
-      passage: "Gusto sanang sumali ni Maya sa science fair, pero natatakot siyang baka hindi maganda ang kanyang proyekto. Sinabi ng kanyang guro, \"Hindi mo kailangang maging perpekto. Kailangan mo lang subukan at matuto habang ginagawa mo ito.\" Huminga si Maya nang malalim, nagparehistro, at sinimulan niyang gawin ang kanyang volcano model nang hapon na iyon.",
-      question: "Bakit hinikayat ng guro ni Maya na sumali siya sa science fair?",
-      accepted: ["subukan at matuto", "subukan at matuto habang ginagawa", "hindi kailangang maging perpekto", "para matuto siya habang sinusubukan", "para matuto", "matuto habang ginagawa", "subukan lang at matuto", "hindi na kailangang perpekto", "matuto siya habang ginagawa", "para siya matuto"],
-    },
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "In the poem, the poet wrote: “The wind whispered wild and wandering words through the willow trees.” This line repeats the same starting consonant sound in several nearby words.",
+    question: "Which sound device is the poet using in this line?",
+    options: ["Alliteration", "Assonance", "Onomatopoeia", "Personification"],
+    correct: 0,
   },
   {
-    en: {
-      passage: "Every morning before school, Elijah fed the stray cats near their sari-sari store. His mother said it taught him responsibility, but Elijah just liked seeing the cats wait for him by the gate.",
-      question: "What did Elijah do every morning before school?",
-      options: [
-        "He fed the stray cats near their sari-sari store",
-        "He walked his dog around the neighborhood",
-        "He watered the plants in the garden",
-        "He helped his mother open the sari-sari store",
-      ],
-      correct: 0,
-    },
-    fil: {
-      passage: "Tuwing umaga bago pumasok sa paaralan, pinapakain ni Elijah ang mga pusang gala malapit sa kanilang sari-sari store. Sabi ng kanyang ina, nagtuturo ito ng responsibilidad, pero gusto lang talaga ni Elijah na makita ang mga pusang naghihintay sa kanya sa gate.",
-      question: "Ano ang ginagawa ni Elijah tuwing umaga bago pumasok sa paaralan?",
-      accepted: ["pinapakain ang mga pusang gala", "pagpapakain sa mga pusa", "kinakain niya ang mga pusa", "pinakain niya ang mga pusang gala", "pinakain ang pusa", "nagpapakain ng pusa", "nagpapakain siya ng pusang gala", "pinapakain niya ang pusa"],
-    },
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "A young writer first describes a quiet mind as being “like a still lake.” In the next draft, she rewrites it as “the mind is a still lake,” removing the word “like.”",
+    question: "Which literary device does the revised line now use?",
+    options: ["Simile", "Metaphor", "Hyperbole", "Alliteration"],
+    correct: 1,
   },
   {
-    en: {
-      passage: "The barangay held a clean-up drive along the river. Volunteers wore gloves and collected plastic bottles, old sacks, and broken slippers. By noon, three full sacks of trash were ready for proper disposal.",
-      question: "How many sacks of trash were collected by noon?",
-      options: ["Three sacks", "Five sacks", "One sack", "Ten sacks"],
-      correct: 0,
-    },
-    fil: {
-      passage: "Nagsagawa ang barangay ng clean-up drive sa tabi ng ilog. Nagsuot ng guwantes ang mga volunteer at nangolekta ng mga plastic bottle, lumang sako, at sirang tsinelas. Pagtanghali, tatlong puno ng basurang sako na ang handa para sa tamang pagtatapon.",
-      question: "Ilang sako ng basura ang nakolekta pagtanghali?",
-      accepted: ["tatlo", "3", "tatlong sako", "3 sako", "may tatlo", "tatlong sako ng basura"],
-    },
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "A student is revising this idea for a poem: “The rain fell. The streets flooded. People stayed inside.” The teacher asks for one smoother, more connected sentence.",
+    question: "Which revision best improves the coherence of these ideas?",
+    options: ["As the rain fell and the streets flooded, people stayed inside.", "The rain fell and the streets flooded and people stayed inside and it was bad.", "Rain. Streets. People. Inside.", "People stayed inside, the streets flooded, rain fell."],
+    correct: 0,
   },
   {
-    en: {
-      passage: "Grace practiced her speech every night in front of the mirror. On the day of the contest, her hands were shaking, but once she started talking about her favorite topic, the fear disappeared.",
-      question: "What helped Grace's fear disappear during the contest?",
-      options: [
-        "Talking about her favorite topic",
-        "Seeing her parents in the audience",
-        "Reading directly from her notes",
-        "Hearing the crowd cheer before she started",
-      ],
-      correct: 0,
-    },
-    fil: {
-      passage: "Pinagpraktisan ni Grace ang kanyang talumpati tuwing gabi sa harap ng salamin. Nang araw ng patimpalak, nanginginig ang kanyang mga kamay, pero nang magsimula siyang magsalita tungkol sa kanyang paboritong paksa, nawala ang kanyang takot.",
-      question: "Ano ang tumulong para mawala ang takot ni Grace sa patimpalak?",
-      accepted: ["pagsasalita tungkol sa paboritong paksa", "ang kanyang paboritong paksa", "nagsalita siya tungkol sa paboritong paksa", "paboritong paksa", "kanyang paboritong paksa", "nag-usap tungkol sa paborito niyang paksa", "pag-uusap tungkol sa paborito niyang paksa"],
-    },
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "A poem ends with the line: “I bent, but I did not break; I bowed, but I did not yield.”",
+    question: "What tone or voice does this line most strongly convey?",
+    options: ["Defeated and hopeless", "Determined and resilient", "Playful and carefree", "Confused and uncertain"],
+    correct: 1,
   },
   {
-    en: {
-      passage: "The old library on Rizal Street was quiet except for the sound of pages turning. Mr. Santos, the librarian, knew exactly where every book belonged, even without checking the shelf labels.",
-      question: "What did Mr. Santos know without checking the shelf labels?",
-      options: [
-        "Where every book belonged",
-        "The names of every visitor",
-        "The library's opening hours",
-        "Which books were overdue",
-      ],
-      correct: 0,
-    },
-    fil: {
-      passage: "Tahimik ang lumang aklatan sa Rizal Street maliban sa ingay ng mga pahinang binabaligtad. Alam na alam ni Mr. Santos, ang librarian, kung saan dapat ilagay ang bawat libro, kahit hindi niya tinitingnan ang mga label sa istante.",
-      question: "Ano ang alam ni Mr. Santos kahit hindi niya tinitingnan ang mga label sa istante?",
-      accepted: ["kung saan dapat ilagay ang bawat libro", "kung saan nakalagay ang bawat libro", "lokasyon ng bawat libro", "saan nakalagay ang libro", "kung saan ilalagay ang libro", "lokasyon ng libro", "kung saan dapat ang bawat libro"],
-    },
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A reader studies a poet’s difficult childhood and lonely adult life to better understand the sadness that appears throughout the poet’s work.",
+    question: "Which contextual lens is being used here?",
+    options: ["Historical", "Biographical", "Formalist", "Sociocultural"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A reader researches the actual dates and major events of a war to better understand the setting of a poem about soldiers.",
+    question: "Which lens is the reader applying?",
+    options: ["Biographical", "Historical", "Reader-response", "Sociocultural"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A reader examines the class differences and social customs of a story’s time period to explain why one character is treated unfairly by others.",
+    question: "Which lens is being applied?",
+    options: ["Formalist", "Psychological", "Sociocultural", "Biographical"],
+    correct: 2,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    question: "Which question would a reader most likely ask when using a sociocultural lens?",
+    options: ["How many rhymes are in the poem?", "What year was the author born?", "How do social class and gender roles affect the characters?", "What font was used in the original publication?"],
+    correct: 2,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    question: "What is the main structural feature that defines a one-act play?",
+    options: ["It has many acts and a large cast", "It focuses on one main conflict without act breaks", "It must be a comedy", "It has no dialogue"],
+    correct: 1,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    passage: "In a play script, a line reads: (She looks away sadly and lowers her voice.)",
+    question: "What is this kind of text, written in italics inside parentheses, called?",
+    options: ["Dialogue", "Monologue", "Stage directions", "Theme statement"],
+    correct: 2,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    passage: "A character in a one-act play struggles with her own fear of failure throughout the story, with no other character opposing her directly.",
+    question: "What type of conflict is this?",
+    options: ["Man vs. Man", "Man vs. Nature", "Man vs. Self", "Man vs. Society"],
+    correct: 2,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    passage: "During prewriting, a playwright fills out a character profile listing a character’s background, fears, and goals before writing any dialogue.",
+    question: "What is the main purpose of this step?",
+    options: ["To decide ticket prices", "To design the stage set", "To understand the character’s traits and motivations", "To list props needed for the show"],
+    correct: 2,
   },
 ];
 
 const LESSONS_PER_LEVEL = 5;
 
-/* ---------- Pre-Test / Post-Test bank ---------- */
-/* This is a 10-item placeholder subset — expand to your full 20-item
-   instrument in TEST_ITEMS before actual field testing. Structure stays the
-   same either way, so the rest of the app keeps working unchanged. */
+/* ---------- Pre-Test / Post-Test bank (MELC-based, Grade 9 English Term 1) ---------- */
+/* 20 items total (7 / 7 / 6 across the three Term 1 competencies), used for both
+   the Pre-Test and the Post-Test. Same melc/melcLabel tagging as READING_ITEMS. */
 
 const TEST_ITEMS = [
-  { passage: "Ana forgot her umbrella, so she waited under the covered walk until the rain stopped.", question: "Why did Ana wait under the covered walk?", options: ["She forgot her umbrella", "She was meeting a friend", "The gate was locked", "She wanted to rest"], correct: 0 },
-  { passage: "The coach told the team, \"A missed shot isn't a loss — it's information.\"", question: "What did the coach mean by \"information\"?", options: ["A missed shot is still useful for learning", "The team should stop shooting", "Losing is unavoidable", "Shots don't matter"], correct: 0 },
-  { passage: "Because the bridge was under repair, commuters took the longer route through the market road.", question: "Why did commuters take the longer route?", options: ["The bridge was under repair", "The market road was faster", "They wanted to shop", "The bridge was closed permanently"], correct: 0 },
-  { passage: "Jun kept a small notebook where he wrote one thing he was grateful for each night.", question: "What did Jun write in his notebook every night?", options: ["Something he was grateful for", "His homework", "A weather report", "A grocery list"], correct: 0 },
-  { passage: "The recipe called for the batter to rest for twenty minutes before baking.", question: "What should happen to the batter before baking?", options: ["It should rest for twenty minutes", "It should be baked right away", "It should be frozen", "It should be doubled"], correct: 0 },
-  { passage: "Despite the power outage, the store stayed open by using a small generator.", question: "How did the store stay open during the outage?", options: ["It used a small generator", "It closed early", "It borrowed power from a neighbor", "It used candles only"], correct: 0 },
-  { passage: "The museum guide asked visitors to keep their voices low near the old manuscripts.", question: "What did the guide ask visitors to do?", options: ["Keep their voices low", "Take more photos", "Walk faster", "Touch the manuscripts carefully"], correct: 0 },
-  { passage: "Even though she was the youngest on the team, Reyna was given the final decision on the design.", question: "What was Reyna given despite being the youngest?", options: ["The final decision on the design", "A trophy", "Extra practice time", "A new title"], correct: 0 },
-  { passage: "The farmer checked the sky before deciding whether to harvest the rice that day.", question: "What did the farmer check before deciding to harvest?", options: ["The sky", "The market price", "His tools", "A calendar"], correct: 0 },
-  { passage: "The librarian reminded students that borrowed books were due back within two weeks.", question: "When were borrowed books due back?", options: ["Within two weeks", "The next day", "At the end of the school year", "Within two months"], correct: 0 },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "“The garden gate creaked and clanked as the wind pushed it back and forth.”",
+    question: "Which sound device appears in the words “creaked” and “clanked”?",
+    options: ["Simile", "Onomatopoeia", "Metaphor", "Personification"],
+    correct: 1,
+  },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "“The moon shone alone on the old stone road.”",
+    question: "The repeated long “o” sound in “alone,” “old,” “stone,” and “road” is an example of which device?",
+    options: ["Assonance", "Consonance", "Alliteration", "Rhyme scheme"],
+    correct: 0,
+  },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    question: "A traditional sonnet, one of the classic forms used in Anglo-American poetry, is made up of how many total lines?",
+    options: ["8", "10", "14", "16"],
+    correct: 2,
+  },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    question: "Which set of line-ending words follows an AABB rhyme scheme?",
+    options: ["light, bright, sea, free", "cat, dog, bat, log", "moon, star, soon, far", "sing, song, moon, star"],
+    correct: 0,
+  },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "“The trees along the ridge / lean toward the valley / where the river bends / and disappears from view.”",
+    question: "The sentence continues across several lines without a pause at the end of each line. What is this technique called?",
+    options: ["Caesura", "Couplet", "Enjambment", "Refrain"],
+    correct: 2,
+  },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    question: "A poet is revising a poem about the ocean to improve unity. Which set of words should the poet use consistently throughout the poem?",
+    options: ["Tide, salt, current, waves", "Desk, chalk, bell, chair", "Engine, wheel, road, horn", "Petal, stem, bloom, garden"],
+    correct: 0,
+  },
+  {
+    melc: "A",
+    melcLabel: "Poetry: Structure & Language",
+    passage: "In a poem, a caged bird sings even though it cannot fly free.",
+    question: "What does the caged bird most likely symbolize?",
+    options: ["A pet that needs feeding", "A longing for freedom despite limits", "A warning about wild animals", "A description of bird anatomy"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A critic studies a writer’s personal letters and diary entries to explain the grief expressed in the writer’s poems.",
+    question: "This is an example of which lens?",
+    options: ["Historical", "Biographical", "Sociocultural", "Formalist"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A reader analyzes a poem about a famine by researching the real historical famine it describes.",
+    question: "This is an example of which lens?",
+    options: ["Biographical", "Historical", "Psychological", "Reader-response"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A reader explains a character’s harsh treatment of servants by describing the strict social hierarchy of the story’s era.",
+    question: "Which lens is this?",
+    options: ["Formalist", "Sociocultural", "Biographical", "Historical"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    question: "Which lens focuses mainly on the text itself — its structure, word choice, and literary devices — rather than outside information about the author or time period?",
+    options: ["Formalist", "Biographical", "Historical", "Sociocultural"],
+    correct: 0,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A reader focuses on their own emotional reaction to a poem and how it connects to their personal experiences.",
+    question: "Which lens is this?",
+    options: ["Historical", "Reader-response", "Sociocultural", "Biographical"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    question: "Understanding a text’s “contextual lens” mainly means the reader is looking for what?",
+    options: ["The exact publication date only", "The background factors that shape the story", "Grammar mistakes in the text", "The rhyme scheme only"],
+    correct: 1,
+  },
+  {
+    melc: "B",
+    melcLabel: "Literary Contextual Lenses",
+    passage: "A student wants to understand why a character values obedience so strongly, and learns the character’s culture practiced strict respect for elders.",
+    question: "Which lens is being applied?",
+    options: ["Sociocultural", "Formalist", "Reader-response", "Biographical"],
+    correct: 0,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    question: "Which part of a play’s structure is the event that sets the rest of the plot into motion?",
+    options: ["Climax", "Exposition", "Inciting incident", "Resolution"],
+    correct: 2,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    question: "Which part of a play’s structure is the moment of greatest tension or turning point?",
+    options: ["Exposition", "Climax", "Falling action", "Denouement"],
+    correct: 1,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    passage: "A character stands alone on stage and speaks their private thoughts aloud to the audience.",
+    question: "What is this dramatic device called?",
+    options: ["Dialogue", "Prologue", "Soliloquy", "Epilogue"],
+    correct: 2,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    question: "The underlying message or central idea a playwright wants the audience to understand is called the play’s:",
+    options: ["Setting", "Plot", "Theme", "Climax"],
+    correct: 2,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    passage: "In a one-act play, a student’s character argues with her best friend over a broken promise.",
+    question: "What kind of conflict is this?",
+    options: ["Man vs. Self", "Man vs. Man", "Man vs. Nature", "Man vs. Society"],
+    correct: 1,
+  },
+  {
+    melc: "C",
+    melcLabel: "One-Act Play Prewriting",
+    question: "Which of the following is a key step during the prewriting stage of an original one-act play?",
+    options: ["Selling tickets to the audience", "Filming the final performance", "Brainstorming a central conflict", "Hiring professional actors"],
+    correct: 2,
+  },
 ];
 
 /* ---------- State ---------- */
@@ -805,15 +961,17 @@ function lessonsThisWeek() {
 }
 
 /* ===================== LEARN (reading module) ===================== */
-/* English-only per client instruction. READING_ITEMS still carries `fil`
-   content alongside `en` in case bilingual support is turned back on later
-   — currentReadingItem() just ignores it for now. */
+/* English-only, MELC-tagged (see MELC_LABELS + READING_ITEMS above). Each
+   item cycles through in order; competencyPillEl surfaces which Term 1
+   learning competency the current item covers. */
 
 const passageEl = document.getElementById("passageText");
+const passageLabelEl = document.getElementById("passageLabel");
 const readingQuestionEl = document.getElementById("readingQuestion");
 const readingOptionsEl = document.getElementById("readingOptions");
 const readingFeedbackEl = document.getElementById("readingFeedback");
 const lessonPillEl = document.getElementById("lessonPill");
+const competencyPillEl = document.getElementById("competencyPill");
 const readingActiveCardEl = document.getElementById("readingActiveCard");
 const readingLockedCardEl = document.getElementById("readingLockedCard");
 const lessonLockedNoteEl = document.getElementById("lessonLockedNote");
@@ -839,8 +997,7 @@ function daysUntilNextLesson() {
 }
 
 function currentReadingItem() {
-  const item = READING_ITEMS[progress.lesson % READING_ITEMS.length];
-  return item.en;
+  return READING_ITEMS[progress.lesson % READING_ITEMS.length];
 }
 
 function renderReading() {
@@ -859,7 +1016,13 @@ function renderReading() {
   readingActiveCardEl.style.display = "block";
 
   const item = currentReadingItem();
-  passageEl.textContent = item.passage;
+  competencyPillEl.textContent = item.melcLabel;
+  // Some items are passage-free (the question stands on its own) — hide the
+  // passage card entirely rather than showing an empty box.
+  const hasPassage = !!item.passage;
+  passageLabelEl.style.display = hasPassage ? "block" : "none";
+  passageEl.style.display = hasPassage ? "block" : "none";
+  passageEl.textContent = hasPassage ? item.passage : "";
   readingQuestionEl.textContent = item.question;
   readingFeedbackEl.textContent = "";
   readingFeedbackEl.className = "reading-feedback";
@@ -1496,6 +1659,7 @@ const testOptionsEl = document.getElementById("testOptions");
 const testProgressFillEl = document.getElementById("testProgressFill");
 const testProgressTextEl = document.getElementById("testProgressText");
 const testRunnerLabelEl = document.getElementById("testRunnerLabel");
+const testCompetencyPillEl = document.getElementById("testCompetencyPill");
 
 function renderTestHome() {
   const pre = progress.preTest;
@@ -1540,7 +1704,11 @@ document.getElementById("startPostTest").addEventListener("click", () => {
 
 function renderTestQuestion() {
   const item = TEST_ITEMS[testIndex];
-  testQuestionEl.innerHTML = `<span style="display:block; font-weight:500; margin-bottom:8px;">${item.passage}</span>${item.question}`;
+  const passageHtml = item.passage
+    ? `<span style="display:block; font-weight:500; margin-bottom:8px;">${item.passage}</span>`
+    : "";
+  testQuestionEl.innerHTML = `${passageHtml}${item.question}`;
+  testCompetencyPillEl.textContent = item.melcLabel;
   testProgressTextEl.textContent = `Item ${testIndex + 1} / ${TEST_ITEMS.length}`;
   testProgressFillEl.style.width = `${(testIndex / TEST_ITEMS.length) * 100}%`;
 
